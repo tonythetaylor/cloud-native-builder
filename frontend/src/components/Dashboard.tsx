@@ -1,4 +1,3 @@
-// src/components/Dashboard.tsx
 import React, { useEffect } from 'react';
 import api from '../services/api';
 import useProjectStore from '../store/useProjectStore';
@@ -6,6 +5,7 @@ import TopBar from './TopBar';
 import Palette from './Palette';
 import Canvas from './Canvas';
 import ProjectSelector from './ProjectSelector';
+import InspectorPanel from './InspectorPanel';
 import { ProjectOut } from '../types';
 
 export default function Dashboard() {
@@ -13,13 +13,10 @@ export default function Dashboard() {
   const selectProject = useProjectStore((s) => s.selectProject);
 
   useEffect(() => {
-    // load existing projects
-    api
-      .get<ProjectOut[]>('/projects')
+    api.get<ProjectOut[]>('/projects')
       .then((res) => {
         setProjects(res.data);
         if (res.data.length) {
-          // auto-select first
           const first = res.data[0];
           selectProject(first.id, first.config.elements, first.name);
         }
@@ -35,8 +32,9 @@ export default function Dashboard() {
           <ProjectSelector />
           <Palette />
         </aside>
-        <main className="flex-1 bg-gray-100 p-4">
+        <main className="flex-1 bg-gray-100 p-4 relative flex">
           <Canvas />
+          <InspectorPanel />
         </main>
       </div>
     </div>
