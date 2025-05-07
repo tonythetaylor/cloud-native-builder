@@ -15,3 +15,11 @@ class ProjectService:
 
     def list_by_owner(self, owner_id: int):
         return self.db.query(Project).filter(Project.owner_id == owner_id).all()
+    
+    def update(self, project_id: int, proj_in: ProjectCreate) -> Project:
+        proj = self.db.query(Project).filter(Project.id == project_id).first()
+        proj.name = proj_in.name
+        proj.config = proj_in.config
+        self.db.commit()
+        self.db.refresh(proj)
+        return proj
