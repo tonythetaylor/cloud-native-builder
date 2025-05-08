@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" href="/favicon.ico" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cloud Native Builder</title>
 </head>
 <body>
   <div id="root"></div>
-  <!-- Vite will replace this with your React bundle -->
+
+  <!-- Keep this! It loads your React/Vite bundle -->
   <script type="module" src="/src/main.tsx"></script>
+
+  <!-- You can remove only the HMR client, not the above line -->
+  <!-- <script type="module" src="/@vite/client"></script> -->
 </body>
 </html>

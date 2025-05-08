@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand'
 
 type Element = { type: string; label: string; x: number; y: number };
 
