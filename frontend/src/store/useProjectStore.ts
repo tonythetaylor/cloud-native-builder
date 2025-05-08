@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand'
 import { ProjectOut } from '../types'; // define this interface to match your backend schema
 
 export interface Element {
