@@ -4,8 +4,14 @@ import api from "../services/api";
 import useAuthStore from "../store/useAuthStore";
 import useProjectStore, { Element } from "../store/useProjectStore";
 import { NewProjectModal } from "./NewProjectModal";
+import { useNavigate } from 'react-router-dom'
 
-export default function TopBar() {
+export interface TopBarProps {
+  onDashboard: () => void
+}
+
+export default function TopBar({ onDashboard }: TopBarProps)  {
+  const nav = useNavigate()
   const [isModalOpen, setModalOpen] = useState(false);
   const token = useAuthStore((s) => s.token);
   const setToken = useAuthStore((s) => s.setToken);
@@ -114,6 +120,12 @@ const exportIaC = async () => {
           className="px-3 py-1 bg-indigo-600 text-white rounded"
         >
           Export
+        </button>
+        <button
+          onClick={() =>  nav('/')}
+          className="px-3 py-1 bg-black text-white rounded"
+        >
+          Projects
         </button>
         <button
           onClick={logout}

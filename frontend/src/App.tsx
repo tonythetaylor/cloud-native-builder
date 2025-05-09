@@ -1,17 +1,22 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import Register from './components/Register';
-import Dashboard from './components/Dashboard';
-import useAuthStore from './store/useAuthStore';
+// src/App.tsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import ProjectsGrid from './components/ProjectsGrid'
+import Dashboard    from './components/Dashboard'
+import Login        from './components/Login'
+import Register     from './components/Register'
 
 export default function App() {
-  const token = useAuthStore(state => state.token);
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/*" element={token ? <Dashboard /> : <Navigate to="/login" />} />
-    </Routes>
-  );
+      <Routes>
+        {/* public auth */}
+        <Route path="/login"    element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* project list */}
+        <Route path="/" element={<ProjectsGrid />} />
+
+        {/* the actual builder UI */}
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+  )
 }

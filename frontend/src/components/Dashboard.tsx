@@ -1,42 +1,46 @@
-import React, { useEffect } from 'react';
-import api from '../services/api';
-import useProjectStore from '../store/useProjectStore';
-import TopBar from './TopBar';
-import Palette from './Palette';
-import Canvas from './Canvas';
-import ProjectSelector from './ProjectSelector';
-import InspectorPanel from './InspectorPanel';
-import { ProjectOut } from '../types';
+// src/components/Dashboard.tsx
+import React from 'react'
+import useProjectStore from '../store/useProjectStore'
+import TopBar from './TopBar'
+import Stepper from './Stepper'
+import StepPanels from './StepPanels'
+import Canvas from './Canvas'
+import { useNavigate } from 'react-router-dom'
 
 export default function Dashboard() {
-  const setProjects = useProjectStore((s) => s.setProjects);
-  const selectProject = useProjectStore((s) => s.selectProject);
-
-  useEffect(() => {
-    api.get<ProjectOut[]>('/projects')
-      .then((res) => {
-        setProjects(res.data);
-        if (res.data.length) {
-          const first = res.data[0];
-          selectProject(first.id, first.config.elements, first.name);
-        }
-      })
-      .catch(console.error);
-  }, [setProjects, selectProject]);
-
+  const step = useProjectStore(s => s.step)
+  const setStep = useProjectStore(s => s.setStep)
+  const nav = useNavigate()
   return (
     <div className="h-screen flex flex-col">
-      <TopBar />
-      <div className="flex flex-1">
-        <aside className="w-64 bg-gray-800 text-white p-4 space-y-4">
-          <ProjectSelector />
-          <Palette />
-        </aside>
-        <main className="flex-1 bg-gray-100 p-4 relative flex">
-          <Canvas />
-          <InspectorPanel />
-        </main>
-      </div>
+      {/* TopBar always at top */}
+      <TopBar onDashboard={() => nav('/')} />
+
+
+      {/* Stepper strip */}
+      <Stepper
+        currentStep={step}
+        onSelect={setStep}
+        className="h-12 border-b"
+      />
+
+      {/* Below: either a full‑width panel or split panel+canvas */}
+      {step === 2 ? (
+        // DESIGN step: show panel on left + canvas on right
+        <div className="flex flex-1 overflow-hidden">
+          <div className="w-80 border-r overflow-auto">
+            <StepPanels />
+          </div>
+          <div className="flex-1">
+            <Canvas />
+          </div>
+        </div>
+      ) : (
+        // REQUIREMENTS or EXPORT: panel fills entire area
+        <div className="flex-1 overflow-auto">
+          <StepPanels />
+        </div>
+      )}
     </div>
-  );
+  )
 }
